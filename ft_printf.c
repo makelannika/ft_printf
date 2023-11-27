@@ -6,39 +6,51 @@
 /*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 18:16:29 by amakela           #+#    #+#             */
-/*   Updated: 2023/11/25 18:02:26 by amakela          ###   ########.fr       */
+/*   Updated: 2023/11/27 21:03:09 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	check_incorrect_specifiers(const char *format);
+static int	read_format(const char *format, va_list args);
 static int	check_specifier(va_list args, const char specifier);
 
 int	ft_printf(const char *format, ...)
 {
-	int			i;
-	int			count;
+	int			ret;
 	va_list		args;
 
-	if (!format)
-		return (-1);
-	if (check_incorrect_specifiers(format) == -1)
-		return (-1);
+	ret = 0;
+	va_start(args, format);
+	ret = read_format(format, args);
+	va_end(args);
+	return (ret);
+}
+
+static int	read_format(const char *format, va_list args)
+{
+	int	i;
+	int	add;
+	int	count;
+
 	i = 0;
 	count = 0;
-	va_start(args, format);
 	while (format[i])
 	{
 		while (format[i] && format[i] != '%')
-			count += ft_printchar(format[i++]);
-		if (format[i] == '%')
 		{
-			i++;
-			count += check_specifier(args, format[i++]);
+			if (ft_printchar(format[i++]) == -1)
+				return (-1);
+			count++;
+		}
+		if (format[i] != '\0' && format[i++] == '%')
+		{
+			add = check_specifier(args, format[i++]);
+			if (add == -1)
+				return (-1);
+			count += add;
 		}
 	}
-	va_end(args);
 	return (count);
 }
 
@@ -61,26 +73,12 @@ static int	check_specifier(va_list args, const char specifier)
 		return (ft_printchar('%'));
 	else if (specifier == 'p')
 	{
-		ft_printstr("0x");
-		return ((ft_printhex(va_arg(args, unsigned long), specifier, &count) + 2));
+		if (ft_printstr("0x") == -1)
+			return (-1);
+		return ((ft_printhex(va_arg(args, unsigned long),
+					specifier, &count) + 2));
 	}
-	return (0);
-}
-
-static int	check_incorrect_specifiers(const char *format)
-{
-	int	i;
-
-	i = 0;
-	while (format[i])
-	{
-		while (format[i] && format[i] != '%')
-			i++;
-		if (format[i++] == '%')
-		{
-			if (ft_strchr("cspdiuxX%", format[i++]) == 0)
-				return (-1);
-		}
-	}
-	return (0);
+	if (ft_printchar(specifier) == -1)
+		return (-1);
+	return (1);
 }

@@ -6,27 +6,32 @@
 /*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:30:43 by amakela           #+#    #+#             */
-/*   Updated: 2023/11/25 17:58:48 by amakela          ###   ########.fr       */
+/*   Updated: 2023/11/27 21:03:06 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_printnbr(long nb, int *count)
+int	ft_printnbr(long nbr, int *count)
 {
-	if (nb == -2147483648)
-		*count = ft_printstr("-2147483648");
-	else if (nb < 0)
+	if (nbr < 0)
 	{
-		*count += ft_printchar('-');
-		ft_printnbr(-nb, count);
+		if (ft_printchar('-') == -1)
+			return (-1);
+		(*count)++;
+		ft_printnbr(-nbr, count);
 	}
-	else if (nb > 9)
+	else if (nbr > 9)
 	{
-		ft_printnbr(nb / 10, count);
-		ft_printnbr(nb % 10, count);
+		if (ft_printnbr(nbr / 10, count) == -1)
+			return (-1);
+		ft_printnbr(nbr % 10, count);
 	}
 	else
-		*count += ft_printchar(nb + 48);
+	{
+		if (ft_printchar(nbr + 48) == -1)
+			return (-1);
+		(*count)++;
+	}
 	return (*count);
 }
