@@ -6,7 +6,7 @@
 #    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/18 17:52:26 by amakela           #+#    #+#              #
-#    Updated: 2023/11/27 20:58:55 by amakela          ###   ########.fr        #
+#    Updated: 2023/11/29 15:53:11 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ OFILES = $(CFILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OFILES) $(LIBFT)
+	cp $(LIBFTDIR)/$(LIBFT) ./
 	ar rcs $(NAME) $(OFILES)
 
 $(LIBFT):
@@ -37,6 +38,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(LIBFT)
 	make -C $(LIBFTDIR) fclean
 
 re: fclean $(NAME)
