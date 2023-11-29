@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:30:43 by amakela           #+#    #+#             */
-/*   Updated: 2023/11/27 21:03:06 by amakela          ###   ########.fr       */
+/*   Updated: 2023/11/28 17:48:35 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	ft_printnbr(long nbr, int *count)
 	}
 	else if (nbr > 9)
 	{
-		if (ft_printnbr(nbr / 10, count) == -1)
+		if ((ft_printnbr(nbr / 10, count) == -1)
+			|| ft_printnbr(nbr % 10, count) == -1)
 			return (-1);
-		ft_printnbr(nbr % 10, count);
 	}
 	else
 	{

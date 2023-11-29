@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 18:16:29 by amakela           #+#    #+#             */
-/*   Updated: 2023/11/27 21:03:09 by amakela          ###   ########.fr       */
+/*   Updated: 2023/11/28 18:39:43 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ static int	check_specifier(va_list args, const char specifier)
 		return (ft_printchar('%'));
 	else if (specifier == 'p')
 	{
-		if (ft_printstr("0x") == -1)
+		if ((ft_printstr("0x") == -1) || (ft_printhex(va_arg
+					(args, unsigned long), specifier, &count) == -1))
 			return (-1);
-		return ((ft_printhex(va_arg(args, unsigned long),
-					specifier, &count) + 2));
+		return (count + 2);
 	}
 	if (ft_printchar(specifier) == -1)
 		return (-1);
